@@ -1,0 +1,34 @@
+/* Scrollbar base styles */
+::-webkit-scrollbar {
+  width: 8px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Scrollbar states */
+body {
+  transition: scrollbar-width 0.3s ease;
+}
+
+body.no-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+body.no-scroll::-webkit-scrollbar {
+  width: 0;
+  background: transparent; /* Chrome, Safari, Opera */
+} 
