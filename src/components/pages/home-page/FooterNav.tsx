@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-const Footer = () => {
+const FooterNav = () => {
   const navItems = [
     { label: 'Export to CSV', action: () => console.log('Export clicked') },
     { label: 'Support', action: () => console.log('Support clicked') },
@@ -40,7 +40,7 @@ const Footer = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => console.log('Contact clicked')}
             >
-              Contact
+              Admin
             </motion.button>
             <motion.button
               className="px-6 py-2 bg-black text-white rounded-full text-sm font-medium"
@@ -57,4 +57,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default FooterNav; 

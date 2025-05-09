@@ -1,11 +1,11 @@
-import Hero from "@/components/main-page-components/Hero";
+import HomePageContent from "@/components/pages/home-page/HomePageContent";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Desktop View */}
       <div className="hidden lg:block">
-        <Hero />
+        <HomePageContent />
       </div>
 
       {/* Mobile and Tablet View */}

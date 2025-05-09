@@ -12,23 +12,9 @@ import {
   ChartConfig,
   ChartContainer,
 } from "@/components/ui/chart"
+import { useXMetrics } from "@/hooks/x-metrics/xMetrics"
+import type { TimeRange } from "@/services/x-metrics/XMetricsGetter"
 
-interface ChartDataPoint {
-  day: string
-  dataset1: number
-  dataset2: number
-  dataset3: number
-}
-
-const chartData: ChartDataPoint[] = [
-  { day: "Sunday", dataset1: 186, dataset2: 80, dataset3: 120 },
-  { day: "Monday", dataset1: 305, dataset2: 200, dataset3: 250 },
-  { day: "Tuesday", dataset1: 237, dataset2: 120, dataset3: 180 },
-  { day: "Wednesday", dataset1: 173, dataset2: 190, dataset3: 220 },
-  { day: "Thursday", dataset1: 209, dataset2: 130, dataset3: 160 },
-  { day: "Friday", dataset1: 214, dataset2: 140, dataset3: 190 },
-  { day: "Saturday", dataset1: 245, dataset2: 160, dataset3: 210 }
-]
 
 const chartConfig = {
   dataset1: {
@@ -46,14 +32,61 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
+  const { chartData, timeRange, updateTimeRange, isLoading, error } = useXMetrics();
+  
+  // Always show a chart, even if there is no data
+  const displayChartData = (chartData && chartData.length > 0)
+    ? chartData
+    : [{
+        day: "No Data",
+        dataset1: 0,
+        dataset2: 0,
+        dataset3: 0,
+      }];
+
+  const timeRangeOptions: { label: string; value: TimeRange }[] = [
+    { label: '7 Days', value: '7d' },
+    { label: '14 Days', value: '14d' },
+    { label: '30 Days', value: '30d' },
+    { label: 'All Time', value: 'all' }
+  ];
+
+  if (error) {
+    return (
+      <Card ref={ref} className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+        <CardContent className="flex items-center justify-center">
+          <p className="text-red-500">Failed to load metrics data</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card ref={ref} className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
       <CardContent className="flex-1 min-h-0 p-4 pb-2 relative">
+        <div className="absolute right-6 top-4 z-20">
+          <select
+            value={timeRange}
+            onChange={(e) => updateTimeRange(e.target.value as TimeRange)}
+            className="bg-white border border-gray-200 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {timeRangeOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="absolute inset-0 p-4 pb-2">
           <ChartContainer config={chartConfig} className="h-full relative z-10">
+            {isLoading ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
-                data={chartData}
+                data={displayChartData}
                 margin={{
                   top: 5,
                   right: 5,
@@ -143,6 +176,7 @@ const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </ChartContainer>
         </div>
       </CardContent>

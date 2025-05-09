@@ -5,8 +5,8 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import Image from 'next/image';
 import SplitType from 'split-type';
-import Footer from './Footer';
-import ScrollArrow from './ScrollArrow';
+import FooterNav from './FooterNav';
+import ScrollArrow from './auxiliaries/ScrollArrow';
 import {
   Grid1Card,
   Grid2Card,
@@ -21,7 +21,7 @@ import {
   Grid11Card,
   Grid12Card,
   Grid13Card,
-} from '../ui/cards/grid';
+} from '../../ui/cards/grid';
 import { motion } from 'framer-motion';
 
 // Add global style to hide scrollbars
@@ -39,7 +39,7 @@ const globalStyles = `
   }
 `;
 
-const Hero = () => {
+const HomePageContent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const initialTextRef = useRef<HTMLDivElement>(null);
@@ -169,7 +169,7 @@ const Hero = () => {
         document.body.classList.remove('no-scroll');
       });
 
-  }, []);
+  }, [gridRefs]);
 
   // Cleanup function to ensure scrolling is re-enabled if component unmounts
   useEffect(() => {
@@ -274,10 +274,10 @@ const Hero = () => {
         ref={footerRef} 
         className="h-20 bg-white"
       >
-        <Footer />
+        <FooterNav />
       </div>
     </>
   );
 };
 
-export default Hero;
+export default HomePageContent;

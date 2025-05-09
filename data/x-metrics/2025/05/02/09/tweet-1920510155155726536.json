@@ -1,0 +1,24 @@
+{
+  "url": "https://x.com/i/status/1920510155155726536",
+  "tweetId": "1920510155155726536",
+  "collectedAt": {
+    "timestamp": 1746726913056,
+    "iso": "2025-05-08T17:55:13.056Z",
+    "readable": "Fri, May 09, 2025, 01:55:13 AM GMT+8"
+  },
+  "postData": {
+    "likes": 38,
+    "retweets": 2,
+    "replies": 21,
+    "views": 993,
+    "quotes": 0,
+    "bookmarks": 0,
+    "postDate": "Thu May 08 16:04:36 +0000 2025",
+    "text": "The real question is who thought it’s over &amp; sold ? 🫵😂"
+  },
+  "engagementSummary": {
+    "date": "2025-05-08",
+    "impressions": 993,
+    "engagements": 61
+  }
+}

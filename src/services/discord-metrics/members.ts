@@ -1,0 +1,1 @@
+// this will be a bot that will be triggered by a cron job to check the number of members in the server and then store it in a json file
