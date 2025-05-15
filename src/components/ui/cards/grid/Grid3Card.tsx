@@ -2,6 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { forwardRef } from 'react'
+import { useTimeRange } from "@/hooks/TimeRangeContext"
 
 import {
   Card,
@@ -13,7 +14,6 @@ import {
   ChartContainer,
 } from "@/components/ui/chart"
 import { useXMetrics } from "@/hooks/x-metrics/xMetrics"
-import type { TimeRange } from "@/services/x-metrics/XMetricsGetter"
 
 
 const chartConfig = {
@@ -31,9 +31,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
-  const { chartData, timeRange, updateTimeRange, isLoading, error } = useXMetrics();
-  
+interface Grid3CardProps {
+  onClick?: () => void;
+}
+
+const Grid3Card = forwardRef<HTMLDivElement, Grid3CardProps>(function Grid3Card({ onClick }, ref) {
+  const { timeRange } = useTimeRange();
+  const { chartData, isLoading, error } = useXMetrics({ timeRange });
+
   // Always show a chart, even if there is no data
   const displayChartData = (chartData && chartData.length > 0)
     ? chartData
@@ -44,16 +49,13 @@ const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
         dataset3: 0,
       }];
 
-  const timeRangeOptions: { label: string; value: TimeRange }[] = [
-    { label: '7 Days', value: '7d' },
-    { label: '14 Days', value: '14d' },
-    { label: '30 Days', value: '30d' },
-    { label: 'All Time', value: 'all' }
-  ];
-
   if (error) {
     return (
-      <Card ref={ref} className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+      <Card
+        ref={ref}
+        className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+        onClick={onClick}
+      >
         <CardContent className="flex items-center justify-center">
           <p className="text-red-500">Failed to load metrics data</p>
         </CardContent>
@@ -62,21 +64,12 @@ const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
   }
 
   return (
-    <Card ref={ref} className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-3 row-start-1 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <CardContent className="flex-1 min-h-0 p-4 pb-2 relative">
-        <div className="absolute right-6 top-4 z-20">
-          <select
-            value={timeRange}
-            onChange={(e) => updateTimeRange(e.target.value as TimeRange)}
-            className="bg-white border border-gray-200 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {timeRangeOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
         <div className="absolute inset-0 p-4 pb-2">
           <ChartContainer config={chartConfig} className="h-full relative z-10">
             {isLoading ? (
@@ -101,7 +94,7 @@ const Grid3Card = forwardRef<HTMLDivElement>((props, ref) => {
                   axisLine={false}
                   tick={false}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={false}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.2)',

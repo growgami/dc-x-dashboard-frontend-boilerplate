@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
+import { TimeRangeProvider } from "@/hooks/TimeRangeContext";
+import { InsightsModalProvider } from "@/hooks/InsightsModalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +44,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${syne.variable} antialiased`}
       >
         <main className={`${spaceGrotesk.variable} ${syne.variable} font-sans`}>
-          {children}
+          <TimeRangeProvider>
+            <InsightsModalProvider>
+              {children}
+            </InsightsModalProvider>
+          </TimeRangeProvider>
         </main>
       </body>
     </html>

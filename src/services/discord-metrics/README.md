@@ -2,27 +2,53 @@
 
 Flow Diagram:
 ```
-[CLIENT SIDE]                         [SERVER SIDE]
-                                
-1. Scheduled Collection:                   
-                                     DiscordMetricsProcessor
-                                     (runs every 30 min)
-                                     - Fetches Discord metrics
-                                     - Processes raw data
-                                     - Stores in JSON/DB
+[CLIENT SIDE]                                   [SERVER SIDE]
 
-2. Data Fetch Flow:
-MetricsGrid Component
-    ↓
-useDiscordMetrics Hook
-sends GET request                
-    ↓
-    → /api/discord-metrics -------→ DiscordMetricsGetter.getData()
-      (API Route)                  - Reads stored data
-    ↑                              - Formats for response
-receives data
-    ↓
-Grid renders metrics
+1. Scheduled Collection (per metric):
+
+  a. Members Metrics:
+     (Scheduler)
+        ↓
+     MemberProcessor (memberProcessor.ts)
+        - Fetches member count
+        - Processes and stores in JSON/DB
+
+  b. Engagement Metrics:
+     (Scheduler)
+        ↓
+     MemberEngagementProcessor (memberEngagementProcessor.ts)
+        - Fetches engagement data
+        - Processes and stores in JSON/DB
+
+2. Data Fetch Flow (per metric):
+
+  a. Members Metrics:
+     MetricsGrid Component
+        ↓
+     useMemberMetrics Hook
+        ↓
+     sends GET request
+        ↓
+     → /api/discord-metrics/members --------→ MemberGetter.getData()
+         (API Route)                         - Reads member data
+        ↑                                    - Formats for response
+     receives data
+        ↓
+     Grid renders member metrics
+
+  b. Engagement Metrics:
+     MetricsGrid Component
+        ↓
+     useMemberEngagementMetrics Hook
+        ↓
+     sends GET request
+        ↓
+     → /api/discord-metrics/member-engagements ----→ MemberEngagementGetter.getData()
+         (API Route)                                 - Reads engagement data
+        ↑                                            - Formats for response
+     receives data
+        ↓
+     Grid renders engagement metrics
 ```
 
 // Bot Service Layer

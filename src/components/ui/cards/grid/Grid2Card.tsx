@@ -21,10 +21,18 @@ const teamMembers: TeamMember[] = [
   }
 ];
 
-const Grid2Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid2CardProps {
+  onClick?: () => void;
+}
+
+const Grid2Card = forwardRef<HTMLDivElement, Grid2CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-1 col-span-2 row-start-4 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] relative overflow-hidden">
-      <div 
+    <Card
+      ref={ref}
+      className="col-start-1 col-span-2 row-start-4 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] relative overflow-hidden"
+      onClick={onClick}
+    >
+      <div
         className="absolute inset-0 z-0 opacity-20"
         style={{
           backgroundImage: `url('/assets/background/grid1Background/wave-pattern.svg')`,

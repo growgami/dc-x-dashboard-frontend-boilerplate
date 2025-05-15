@@ -40,9 +40,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const Grid8Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid8CardProps {
+  onClick?: () => void;
+}
+
+const Grid8Card = forwardRef<HTMLDivElement, Grid8CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-4 row-start-2 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-4 row-start-2 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <CardContent className="flex-1 min-h-0 p-4 pb-2 relative">
         <div className="absolute inset-0 p-4 pb-2">
           <ChartContainer config={chartConfig} className="h-full relative">
@@ -63,7 +71,7 @@ const Grid8Card = forwardRef<HTMLDivElement>((props, ref) => {
                   axisLine={false}
                   tick={false}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={false}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.2)',

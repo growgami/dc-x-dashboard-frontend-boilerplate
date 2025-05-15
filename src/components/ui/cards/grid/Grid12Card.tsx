@@ -21,7 +21,11 @@ const sampleTweets = [
   }
 ];
 
-const Grid12Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid12CardProps {
+  onClick?: () => void;
+}
+
+const Grid12Card = forwardRef<HTMLDivElement, Grid12CardProps>(({ onClick }, ref) => {
   const [currentTweetIndex, setCurrentTweetIndex] = useState(0);
 
   useEffect(() => {
@@ -33,7 +37,11 @@ const Grid12Card = forwardRef<HTMLDivElement>((props, ref) => {
   }, []);
 
   return (
-    <Card ref={ref} className="col-start-4 row-start-6 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-4 row-start-6 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <div className="p-6 h-full">
         <div className="h-full relative overflow-hidden">
           <AnimatePresence mode="wait">

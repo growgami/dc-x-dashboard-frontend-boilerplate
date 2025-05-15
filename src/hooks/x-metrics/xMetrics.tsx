@@ -64,8 +64,7 @@ const calculatePercentages = (
 };
 
 // Custom hook to fetch X metrics data
-export function useXMetrics({ timeRange: initialTimeRange = '7d' }: UseXMetricsOptions = {}) {
-  const [timeRange, setTimeRange] = useState<TimeRange>(initialTimeRange);
+export function useXMetrics({ timeRange = '7d' }: UseXMetricsOptions = {}) {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [percentages, setPercentages] = useState<MetricsPercentages>({
     followers: 0,
@@ -129,12 +128,8 @@ export function useXMetrics({ timeRange: initialTimeRange = '7d' }: UseXMetricsO
     // Data
     chartData,
     percentages,
-    timeRange,
     isLoading: isCurrentLoading,
     error: currentError,
-
-    // Actions
-    updateTimeRange: (newRange: TimeRange) => setTimeRange(newRange),
   };
 }
 

@@ -5,11 +5,14 @@ import Card from '../Card';
 import { Users, LineChart, Heart } from 'lucide-react';
 import { useXMetrics } from "@/hooks/x-metrics/xMetrics";
 
+import { useTimeRange } from "@/hooks/TimeRangeContext";
+
 interface Grid4CardProps {
-  timeRange: import('@/services/x-metrics/XMetricsGetter').TimeRange;
+  onClick?: () => void;
 }
 
-const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(({ timeRange }, ref) => {
+const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card({ onClick }, ref) {
+  const { timeRange } = useTimeRange();
   const { percentages, isLoading, error } = useXMetrics({ timeRange });
 
   const formatPercentage = (value: number) => {
@@ -19,7 +22,11 @@ const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(({ timeRange }, ref
 
   if (error) {
     return (
-      <Card ref={ref} className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+      <Card
+        ref={ref}
+        className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+        onClick={onClick}
+      >
         <div className="h-full w-full flex items-center justify-center">
           <p className="text-red-500">Failed to load metrics data</p>
         </div>
@@ -28,7 +35,11 @@ const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(({ timeRange }, ref
   }
 
   return (
-    <Card ref={ref} className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <div className="h-full w-full flex items-center justify-center">
         {isLoading ? (
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />

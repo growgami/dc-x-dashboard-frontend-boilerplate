@@ -52,7 +52,11 @@ const sampleBadgeData: BadgeData[] = [
   },
 ];
 
-const Grid6Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid6CardProps {
+  onClick?: () => void;
+}
+
+const Grid6Card = forwardRef<HTMLDivElement, Grid6CardProps>(({ onClick }, ref) => {
   const [value, setValue] = useState<Date | null>(new Date(2024, 4, 1));
   const [openModal, setOpenModal] = useState(false);
   const [, setSelectedEvents] = useState<string[]>([]);
@@ -94,9 +98,9 @@ const Grid6Card = forwardRef<HTMLDivElement>((props, ref) => {
         variant="dot"
         invisible={!badgeContent || outsideCurrentMonth}
       >
-        <PickersDay 
-          {...other} 
-          outsideCurrentMonth={outsideCurrentMonth} 
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
           day={day}
           selected={false}
           onDaySelect={() => handleDateClick(day)}
@@ -107,7 +111,11 @@ const Grid6Card = forwardRef<HTMLDivElement>((props, ref) => {
 
   return (
     <>
-      <Card ref={ref} className="col-start-5 row-start-1 row-span-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+      <Card
+        ref={ref}
+        className="col-start-5 row-start-1 row-span-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+        onClick={onClick}
+      >
         <div className="p-6 h-full flex flex-col">
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Content Calendar</h3>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

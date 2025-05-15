@@ -7,9 +7,17 @@ import {
   CardContent,
 } from "@/components/ui/cards/Card"
 
-const Grid9Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid9CardProps {
+  onClick?: () => void;
+}
+
+const Grid9Card = forwardRef<HTMLDivElement, Grid9CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-4 row-start-4 col-span-2 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-4 row-start-4 col-span-2 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <CardContent className="p-6 h-full flex items-center justify-center">
         <div className="flex items-center justify-center gap-12">
           <div className="flex items-baseline gap-3">

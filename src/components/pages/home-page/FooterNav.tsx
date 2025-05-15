@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTimeRange } from "@/hooks/TimeRangeContext";
 
 const FooterNav = () => {
   const navItems = [
@@ -10,8 +11,11 @@ const FooterNav = () => {
     { label: 'Settings', action: () => console.log('Settings clicked') },
   ];
 
+  // Time range context
+  const { timeRange, setTimeRange, options } = useTimeRange();
+
   return (
-    <motion.nav 
+    <motion.nav
       className="w-full h-full bg-white/80 backdrop-blur-sm border-t border-black/5"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -21,7 +25,7 @@ const FooterNav = () => {
         <div className="h-full flex items-center justify-between">
           <div className="flex items-center gap-12">
             {navItems.map((item) => (
-              <motion.button 
+              <motion.button
                 key={item.label}
                 onClick={item.action}
                 className="text-black/70 hover:text-black transition-colors text-sm font-medium"
@@ -34,6 +38,19 @@ const FooterNav = () => {
           </div>
           
           <div className="flex items-center gap-8">
+            {/* Time Range Selector */}
+            <select
+              value={timeRange}
+              onChange={e => setTimeRange(e.target.value as typeof timeRange)}
+              className="bg-white text-black border border-gray-200 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ minWidth: 120 }}
+            >
+              {options.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <motion.button
               className="text-black/70 hover:text-black transition-colors text-sm font-medium"
               whileHover={{ scale: 1.05 }}

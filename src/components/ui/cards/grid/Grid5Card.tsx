@@ -2,9 +2,17 @@ import { forwardRef } from 'react';
 import Card from '../Card';
 import { Users, MessageSquare } from 'lucide-react';
 
-const Grid5Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid5CardProps {
+  onClick?: () => void;
+}
+
+const Grid5Card = forwardRef<HTMLDivElement, Grid5CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-4 row-start-1 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-4 row-start-1 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <div className="h-full w-full flex items-center justify-center px-4">
         <div className="grid grid-cols-2 gap-6 w-full">
           <div className="flex flex-col items-center text-center">

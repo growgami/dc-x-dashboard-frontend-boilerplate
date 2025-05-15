@@ -3,9 +3,17 @@ import Card from '../Card';
 import { FaXTwitter, FaDiscord } from 'react-icons/fa6';
 import { BiGlobe } from 'react-icons/bi';
 
-const Grid13Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid13CardProps {
+  onClick?: () => void;
+}
+
+const Grid13Card = forwardRef<HTMLDivElement, Grid13CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-5 row-start-6 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]">
+    <Card
+      ref={ref}
+      className="col-start-5 row-start-6 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
+      onClick={onClick}
+    >
       <div className="p-6 h-full flex items-center justify-center">
         <div className="flex justify-between w-48">
           <a href="#" className="text-4xl text-gray-800 hover:text-blue-700 transition-colors">

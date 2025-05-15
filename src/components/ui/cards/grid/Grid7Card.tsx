@@ -33,9 +33,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const Grid7Card = forwardRef<HTMLDivElement>((props, ref) => {
+interface Grid7CardProps {
+  onClick?: () => void;
+}
+
+const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) => {
   return (
-    <Card ref={ref} className="col-start-3 row-start-4 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] z-10">
+    <Card
+      ref={ref}
+      className="col-start-3 row-start-4 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] z-10"
+      onClick={onClick}
+    >
       <div className="px-6 pt-6">
         <h3 className="text-2xl font-semibold text-gray-900">Form Submissions</h3>
       </div>
@@ -65,7 +73,7 @@ const Grid7Card = forwardRef<HTMLDivElement>((props, ref) => {
                   axisLine={false}
                   tickFormatter={(value) => value.slice(0, 3)}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={false}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -91,9 +99,9 @@ const Grid7Card = forwardRef<HTMLDivElement>((props, ref) => {
                     textShadow: '0 1px 2px rgba(255, 255, 255, 0.1)'
                   }}
                 />
-                <Bar 
+                <Bar
                   name={chartConfig.fills.label}
-                  dataKey="fills" 
+                  dataKey="fills"
                   fill="url(#fillFills)"
                   fillOpacity={0.8}
                   stroke={chartConfig.fills.color}
