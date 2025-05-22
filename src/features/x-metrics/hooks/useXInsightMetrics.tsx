@@ -1,0 +1,1 @@
+// for the insights modal and the grid 4 component since it is also text based

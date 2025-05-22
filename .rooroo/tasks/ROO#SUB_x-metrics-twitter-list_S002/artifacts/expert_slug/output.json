@@ -1,0 +1,33 @@
+{
+  "manual_submission_references": [
+    {
+      "file": "src/components/pages/x-link-submission-page/XLinksForm.tsx",
+      "lines": [3, 7, 13, 16, 18, 71, 88, 97],
+      "description": "Imports and uses useXLinkSubmission hook. Handles form submission via handleSubmit, which calls submitXLink. UI for manual X link submission."
+    },
+    {
+      "file": "src/hooks/x-metrics/xLinkSubmission.tsx",
+      "lines": [16, 72, 99],
+      "description": "Defines useXLinkSubmission hook. Implements submitXLink function, which validates, enforces cooldown, and POSTs to /api/link-submission."
+    },
+    {
+      "file": "src/app/api/(x-link)/link-submission/route.ts",
+      "lines": [48, 73],
+      "description": "API route for manual submission. Receives tweet ID, fetches Twitter data, and stores via XLinkProcessor.storePostData."
+    },
+    {
+      "file": "src/services/x-metrics/README.md",
+      "lines": [10, 11],
+      "description": "Documentation reference to useXLinkSubmission hook and its POST request behavior."
+    },
+    {
+      "file": "src/app/(pages)/x-link-submission/page.tsx",
+      "lines": [1],
+      "description": "Imports and renders XLinksForm component, exposing manual submission UI at this route."
+    }
+  ],
+  "notes": [
+    "Manual submission logic is isolated to the XLinksForm -> useXLinkSubmission -> /api/link-submission -> XLinkProcessor.storePostData flow.",
+    "No other components, hooks, or services reference or implement manual submission logic."
+  ]
+}

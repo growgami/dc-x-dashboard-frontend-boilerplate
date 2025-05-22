@@ -1,1 +1,14 @@
-
+{
+  "taskId": "ROO#SUB_x-metrics-twitter-list_S004",
+  "parentTaskId": "ROO#PLAN_20250516022418_x-metrics-twitter-list",
+  "suggested_mode": "rooroo-developer",
+  "context_file_path": ".rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S004/context.md",
+  "goal_for_expert": "Delete src/components/pages/x-link-submission-page/XLinksForm.tsx and remove all references to the old manual submission process throughout the codebase. Input: src/components/pages/x-link-submission-page/XLinksForm.tsx, .rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S002/artifacts/expert_slug/output.json. Output: .rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S004/artifacts/expert_slug/output.json"
+}
+{
+  "taskId": "ROO#SUB_x-metrics-twitter-list_S005",
+  "parentTaskId": "ROO#PLAN_20250516022418_x-metrics-twitter-list",
+  "suggested_mode": "rooroo-developer",
+  "context_file_path": ".rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S005/context.md",
+  "goal_for_expert": "Validate that the refactored XMetricsGetter and removal of manual submission integrate smoothly with the rest of the metrics system. Confirm that data is fetched, processed, and made available as expected. Input: src/services/x-metrics/XMetricsGetter.ts, data/x-metrics-mock.csv, data/x-metrics.db, src/hooks/x-metrics/xMetrics.tsx, src/hooks/x-metrics/useXMetrics.tsx, src/app/api/(x-link)/x-metrics/route.ts, .rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S003/artifacts/expert_slug/output.json, .rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S004/artifacts/expert_slug/output.json. Output: .rooroo/tasks/ROO#SUB_x-metrics-twitter-list_S005/artifacts/expert_slug/output.json"
+}

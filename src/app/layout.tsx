@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
-import { TimeRangeProvider } from "@/hooks/TimeRangeContext";
-import { InsightsModalProvider } from "@/hooks/InsightsModalContext";
+import { TimeRangeProvider } from "@/context/TimeRangeContext";
+import { InsightsModalProvider } from "@/context/InsightsModalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

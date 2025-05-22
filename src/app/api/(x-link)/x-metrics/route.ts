@@ -1,25 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDailyMetrics, TimeRange } from '@/services/x-metrics/XMetricsGetter';
-import type { XMetricsAggregatedRow } from '@/services/x-metrics/XMetricsGetter';
+import { getDailyMetrics } from '@/features/x-metrics/services/xMetricsGetter';
+import type { XMetricsAggregatedRow } from '@/features/x-metrics/services/xMetricsGetter';
+
+import { seedXMockData } from '@/data/mock/x-metrics/x-mock';
 
 export async function GET(
   request: NextRequest
 ): Promise<NextResponse<XMetricsAggregatedRow[]>> {
-  // Get timeRange from query params, default to '7d'
+  // Get timeRange and grouping from query params
   const searchParams = request.nextUrl.searchParams;
-  const timeRange = (searchParams.get('timeRange') || '7d') as TimeRange;
-  const groupingParam = searchParams.get('grouping');
-  const validGroupings = ['day', 'week', 'month'] as const;
-  type Grouping = typeof validGroupings[number];
-  function isValidGrouping(value: string | null): value is Grouping {
-    return value !== null && validGroupings.includes(value as Grouping);
-  }
-  let grouping: Grouping = isValidGrouping(groupingParam) ? groupingParam : 'day';
-  // Only allow 'week' or 'month' grouping for the past 7 days; otherwise, force 'day'
-  if (timeRange !== '7d') {
+  const timeRange = (searchParams.get('timeRange') || 'daily');
+  // Sanitize grouping: only allow 'day', 'week', or 'month'
+  const rawGrouping = searchParams.get('grouping') || 'day';
+  let grouping: 'day' | 'week' | 'month' = 'day';
+  if (rawGrouping.startsWith('week')) {
+    grouping = 'week';
+  } else if (rawGrouping.startsWith('month')) {
+    grouping = 'month';
+  } else {
     grouping = 'day';
   }
-  
-  const metrics = await getDailyMetrics(timeRange, grouping);
+  let effectiveTimeRange: string = '7d';
+
+  // If grouping is not provided, infer from timeRange
+  if (!searchParams.get('grouping')) {
+    if (timeRange === 'daily') {
+      grouping = 'day';
+      effectiveTimeRange = '7d';
+    } else if (timeRange === 'weekly') {
+      grouping = 'week';
+      effectiveTimeRange = 'all';
+    } else if (timeRange === 'monthly') {
+      grouping = 'month';
+      effectiveTimeRange = 'all';
+    }
+  } else {
+    // If grouping is provided, use timeRange for effectiveTimeRange
+    if (timeRange === 'daily') {
+      effectiveTimeRange = '7d';
+    } else {
+      effectiveTimeRange = 'all';
+    }
+  }
+
+  const metrics = await getDailyMetrics(effectiveTimeRange, grouping);
+  console.log("[x-metrics] API response for", { timeRange: effectiveTimeRange, grouping }, metrics);
   return NextResponse.json(metrics);
+}
+
+export async function POST(): Promise<NextResponse<{ success: boolean; message: string }>> {
+  try {
+    const result = await seedXMockData();
+    return NextResponse.json({ success: true, message: result.message });
+  } catch (err: unknown) {
+    console.error("[x-mock] Seeding failed:", err);
+    const message = typeof err === "object" && err && "message" in err
+      ? (err as { message?: string }).message || "Unknown error"
+      : "Unknown error";
+    return NextResponse.json({ success: false, message }, { status: 500 });
+  }
 }

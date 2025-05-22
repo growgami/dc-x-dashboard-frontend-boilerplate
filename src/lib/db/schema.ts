@@ -17,15 +17,16 @@ export interface TweetMetrics {
   views: number;
   quotes: number;
   bookmarks: number;
+  followers: number;
   collected_at: string;
 }
 
 export interface EngagementMetrics {
   id: number;
-  tweet_id: string;
   date: string;
   impressions: number;
   engagements: number;
+  followers: number;
   created_at: string;
 }
 
@@ -36,4 +37,4 @@ export type TweetInsert = Omit<Tweet, 'id' | 'created_at' | 'updated_at'>;
 export type TweetMetricsInsert = Omit<TweetMetrics, 'id'>;
 
 // Type for inserting new engagement metrics (without id and created_at)
-export type EngagementMetricsInsert = Omit<EngagementMetrics, 'id' | 'created_at'>; 
+export type EngagementMetricsInsert = Omit<EngagementMetrics, 'id' | 'created_at'>;

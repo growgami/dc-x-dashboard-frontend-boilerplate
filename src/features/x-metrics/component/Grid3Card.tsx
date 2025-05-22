@@ -2,7 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, ResponsiveContainer, Tooltip } from "recharts"
 import { forwardRef } from 'react'
-import { useTimeRange } from "@/hooks/TimeRangeContext"
+import { useTimeRange } from "@/context/TimeRangeContext"
 
 import {
   Card,
@@ -13,7 +13,7 @@ import {
   ChartConfig,
   ChartContainer,
 } from "@/components/ui/chart"
-import { useXMetrics } from "@/hooks/x-metrics/xMetrics"
+import { useXMetrics } from "@/features/x-metrics/hooks/useXChartMetrics"
 
 
 const chartConfig = {

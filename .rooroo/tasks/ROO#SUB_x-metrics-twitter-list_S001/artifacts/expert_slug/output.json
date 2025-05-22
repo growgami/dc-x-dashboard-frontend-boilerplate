@@ -1,0 +1,32 @@
+{
+  "summary": "The logic in src/services/x-metrics/XMetricsGetter.ts fetches and processes tweet engagement metrics from a local database table (engagement_metrics). There are two main functions: getMetricsByTimeRange and getDailyMetrics.",
+  "fetching": {
+    "function": "getMetricsByTimeRange",
+    "description": "Fetches raw engagement metrics for tweets from the engagement_metrics table. Optionally filters by a time range (7d, 14d, 30d, all). If a finite time range is specified, only tweets from the last N days are included. Results are ordered by date ascending.",
+    "sql": "SELECT id, tweet_id, date, impressions, engagements, created_at FROM engagement_metrics [WHERE date >= date('now', '-N days')] ORDER BY date ASC"
+  },
+  "processing": {
+    "function": "getDailyMetrics",
+    "description": "Aggregates engagement metrics by day, week, or month. For '7d' time range, grouping can be by day, week, or month; for other ranges, only daily grouping is allowed. Aggregation is performed using SQL GROUP BY. Adds a 'label' field for frontend display, formatted based on grouping.",
+    "sql_examples": [
+      {
+        "grouping": "day",
+        "sql": "SELECT date, SUM(impressions) as impressions, SUM(engagements) as engagements FROM engagement_metrics [WHERE date IN (SELECT date FROM engagement_metrics GROUP BY date ORDER BY date DESC LIMIT N)] GROUP BY date ORDER BY date ASC"
+      },
+      {
+        "grouping": "week",
+        "sql": "SELECT strftime('%Y', date) as year, strftime('%W', date) as week, MIN(date) as start_date, MAX(date) as end_date, SUM(impressions) as impressions, SUM(engagements) as engagements FROM engagement_metrics [WHERE ...] GROUP BY year, week ORDER BY year ASC, week ASC"
+      },
+      {
+        "grouping": "month",
+        "sql": "SELECT strftime('%Y', date) as year, strftime('%m', date) as month, MIN(date) as start_date, MAX(date) as end_date, SUM(impressions) as impressions, SUM(engagements) as engagements FROM engagement_metrics [WHERE ...] GROUP BY year, month ORDER BY year ASC, month ASC"
+      }
+    ],
+    "post_processing": "Each aggregated row is mapped to add a 'label' field for display, e.g., for day: row.date; for week: 'YYYY-Www (start_date to end_date)'; for month: 'YYYY-MM (start_date to end_date)'."
+  },
+  "notes": [
+    "All data is fetched from the local database, not directly from the Twitter API.",
+    "Error handling is present: on error, an empty array is returned and the error is logged.",
+    "The code is designed for flexible time range and grouping, but only allows week/month grouping for the most recent 7 days."
+  ]
+}

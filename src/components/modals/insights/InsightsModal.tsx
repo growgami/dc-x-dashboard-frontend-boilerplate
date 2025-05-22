@@ -41,8 +41,8 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 // To add a new insight card, import it below.
 import Grid1Card from "@/components/ui/cards/grid/Grid1Card";
 import Grid2Card from "@/components/ui/cards/grid/Grid2Card";
-import Grid3Card from "@/components/ui/cards/grid/Grid3Card";
-import Grid4Card from "@/components/ui/cards/grid/Grid4Card";
+import Grid3Card from "@/features/x-metrics/component/Grid3Card";
+import Grid4Card from "@/features/x-metrics/component/Grid4Card";
 import Grid5Card from "@/components/ui/cards/grid/Grid5Card";
 import Grid6Card from "@/components/ui/cards/grid/Grid6Card";
 import Grid7Card from "@/components/ui/cards/grid/Grid7Card";

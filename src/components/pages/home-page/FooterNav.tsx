@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTimeRange } from "@/hooks/TimeRangeContext";
+import { useTimeRange } from "@/context/TimeRangeContext";
 
 const FooterNav = () => {
   const navItems = [

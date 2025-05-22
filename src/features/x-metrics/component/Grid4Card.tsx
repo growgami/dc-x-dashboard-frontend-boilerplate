@@ -1,11 +1,11 @@
 "use client"
 
 import { forwardRef } from 'react';
-import Card from '../Card';
+import Card from '../../../components/ui/cards/Card';
 import { Users, LineChart, Heart } from 'lucide-react';
-import { useXMetrics } from "@/hooks/x-metrics/xMetrics";
+import { useXMetrics } from "@/features/x-metrics/hooks/useXChartMetrics";
 
-import { useTimeRange } from "@/hooks/TimeRangeContext";
+import { useTimeRange } from "@/context/TimeRangeContext";
 
 interface Grid4CardProps {
   onClick?: () => void;

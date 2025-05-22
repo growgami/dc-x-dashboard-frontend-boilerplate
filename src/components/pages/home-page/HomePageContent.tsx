@@ -20,11 +20,11 @@ import {
   Grid12Card,
   Grid13Card,
 } from '../../ui/cards/grid';
-import Grid3Card from '../../ui/cards/grid/Grid3Card';
-import Grid4Card from '../../ui/cards/grid/Grid4Card';
+import Grid3Card from '../../../features/x-metrics/component/Grid3Card';
+import Grid4Card from '../../../features/x-metrics/component/Grid4Card';
 import { motion } from 'framer-motion';
 import InsightsModal from '../../modals/insights/InsightsModal';
-import { useInsightsModal } from '@/hooks/InsightsModalContext';
+import { useInsightsModal } from '@/context/InsightsModalContext';
 // Add global style to hide scrollbars
 const globalStyles = `
   html, body {
@@ -177,7 +177,7 @@ const HomePageContent = () => {
         document.body.classList.remove('no-scroll');
       });
 
-  }, []); // Remove gridRefs dependency since it's now constant
+  }, [gridRefs]); // Add gridRefs to dependencies for ESLint compliance
 
   const handleScrollToFooter = () => {
     footerRef.current?.scrollIntoView({ 
