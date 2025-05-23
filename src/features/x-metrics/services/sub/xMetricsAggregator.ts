@@ -1,23 +1,35 @@
 /**
- * Aggregation script: Summarizes tweet_metrics into daily engagement_metrics.
- * Usage: npx ts-node src/features/x-metrics/services/aggregateEngagementMetrics.ts
- * 
+ * Aggregates tweet_metrics into daily engagement_metrics.
  * For each day, sums:
  *   - impressions (views)
  *   - engagements (likes + retweets + replies + quotes + bookmarks)
  *   - followers (latest value per day)
  * and inserts/updates one row per day in engagement_metrics.
+ * 
+ * Returns a summary of the aggregation.
  */
 
-import { getDb } from "../../../lib/db/index";
+import { getDb } from "../../../../lib/db/index";
 
-export async function aggregateEngagementMetrics() {
+export interface AggregationResult {
+  daysProcessed: number;
+  upserts: Array<{
+    date: string;
+    impressions: number;
+    engagements: number;
+    followers: number;
+  }>;
+}
+
+export async function aggregateEngagementMetrics(): Promise<AggregationResult> {
   const db = await getDb();
 
   // Get all unique post_dates from tweets
   const { rows: dates } = await db.query(`
     SELECT DISTINCT post_date FROM tweets ORDER BY post_date ASC
   `);
+
+  const upserts: AggregationResult["upserts"] = [];
 
   for (const { post_date } of dates) {
     // Get all tweet_metrics for this day
@@ -57,13 +69,16 @@ export async function aggregateEngagementMetrics() {
       [post_date, impressions, engagements, followers]
     );
 
-    console.log(`[AGG] Upserted engagement_metrics for ${post_date}: impressions=${impressions}, engagements=${engagements}, followers=${followers}`);
+    upserts.push({
+      date: post_date,
+      impressions,
+      engagements,
+      followers,
+    });
   }
 
-  console.log("Aggregation complete.");
+  return {
+    daysProcessed: upserts.length,
+    upserts,
+  };
 }
-
-aggregateEngagementMetrics().catch((err) => {
-  console.error("Aggregation failed:", err);
-  process.exit(1);
-});

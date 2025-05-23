@@ -1,9 +1,9 @@
 import useSWR from 'swr';
 import { useState, useEffect, useCallback } from 'react';
 import type { EngagementMetrics } from '@/lib/db/schema';
-import type { TimeRange } from '@/context/TimeRangeContext';
+import type { XMetricsAggregatedRow } from '../types/xMetricsTypes'; // NEW: import from types
 
- // Types
+// Types
 export interface ChartDataPoint {
   day: string;
   dataset1: number; // followers
@@ -11,13 +11,8 @@ export interface ChartDataPoint {
   dataset3: number; // engagements
 }
 
-type XMetricsApiData = {
-  impressions: number;
-  engagements: number;
-  followers: number;
-  date?: string;
-  label?: string;
-};
+// Use the shared type for API data
+type XMetricsApiData = XMetricsAggregatedRow;
 
 export interface MetricsPercentages {
   followers: number;
@@ -26,7 +21,7 @@ export interface MetricsPercentages {
 }
 
 interface UseXMetricsOptions {
-  timeRange?: TimeRange;
+  timeRange?: string; // Accepts 'daily' | 'weekly' | 'monthly'
 }
 
 // Fetcher function for SWR
@@ -48,8 +43,6 @@ const fetcher = async (url: string) => {
   }
   return data;
 };
-
-// Transform metrics data into chart format
 
 // Calculate percentage changes
 type MetricsInput = { impressions: number; engagements: number; followers: number }[];

@@ -31,6 +31,9 @@ const syne = Syne({
 export const metadata: Metadata = {
   title: "Rayls Dashboard",
   description: "Metrics for Rayls",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

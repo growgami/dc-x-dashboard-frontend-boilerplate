@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDailyMetrics } from '@/features/x-metrics/services/xMetricsGetter';
-import type { XMetricsAggregatedRow } from '@/features/x-metrics/services/xMetricsGetter';
+import { getDailyMetrics } from '@/features/x-metrics/services/sub/xMetricsDb';
+import type { XMetricsAggregatedRow } from '@/features/x-metrics/types/xMetricsTypes';
 
 import { seedXMockData } from '@/data/mock/x-metrics/x-mock';
 

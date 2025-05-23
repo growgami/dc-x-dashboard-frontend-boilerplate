@@ -8,7 +8,7 @@
  */
 
 import { getDb } from "../../../lib/db/index";
-import { aggregateEngagementMetrics } from "../../../features/x-metrics/services/aggregateEngagementMetrics";
+import { aggregateEngagementMetrics } from "../../../features/x-metrics/services/sub/xMetricsAggregator";
 
 export async function seedXMockData() {
   const db = await getDb();
