@@ -285,7 +285,7 @@ const HomePageContent = () => {
     <InsightsModal 
       open={modalOpen} 
       onClose={closeModal} 
-      selectedCardId={selectedCard}
+      selectedCardId={selectedCard || undefined}
     />
     </>
   );

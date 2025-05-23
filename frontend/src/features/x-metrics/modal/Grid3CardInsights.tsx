@@ -23,17 +23,7 @@
 "use client"
 
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "../../../components/ui/cards/Card";
 import { 
-  BarChart, 
-  Bar, 
   LineChart, 
   Line, 
   ResponsiveContainer, 
@@ -42,18 +32,12 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend,
-  PieChart,
-  Pie,
-  Cell,
   Area,
   AreaChart
 } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
-import { Button } from "../../../components/ui/button";
 import { useTimeRange } from "../../../context/TimeRangeContext";
 import { useXMetrics } from "../hooks/useXChartMetrics";
-
-const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))'];
 
 // Additional detailed metrics that would be fetched from API in a real implementation
 const detailedInsights = {
