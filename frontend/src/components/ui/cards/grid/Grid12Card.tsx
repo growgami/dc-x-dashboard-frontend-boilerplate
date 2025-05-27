@@ -2,35 +2,40 @@ import { forwardRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Card from '../Card';
 
-// Sample tweets - replace with actual data source
-const sampleTweets = [
+// Real Rayls tweets - cropped for gist
+const raylsTweets = [
   {
     id: 1,
-    text: "Just shipped a new feature! 🚀 #coding",
-    author: "@developer1"
+    text: "Chamando todos os brasileiros 🇧🇷 Vamos mostrar nossa força 💪",
+    author: "@RaylsLabs",
+    timeAgo: "20h"
   },
   {
     id: 2,
-    text: "Learning something new everyday. Today: React animations! 💡",
-    author: "@developer2"
+    text: "Rayls at TokenNation Brasil 2025 🟡🟣 Brazil's leading Web3 event, June 4-5",
+    author: "@RaylsLabs",
+    timeAgo: "23h"
   },
   {
     id: 3,
-    text: "Code review time! Remember: clean code is happy code 😊",
-    author: "@developer3"
+    text: "@X10xalex joined MOIC's Arbitrum Week exploring institutional blockchain adoption 👇",
+    author: "@RaylsLabs",
+    timeAgo: "May 26"
+  },
+  {
+    id: 4,
+    text: "WHEN TESTNET? 🤔 @mcvviriato dropped spoilers about what's coming next for Rayls",
+    author: "@RaylsLabs",
+    timeAgo: "May 22"
   }
 ];
 
-interface Grid12CardProps {
-  onClick?: () => void;
-}
-
-const Grid12Card = forwardRef<HTMLDivElement, Grid12CardProps>(({ onClick }, ref) => {
+const Grid12Card = forwardRef<HTMLDivElement>((props, ref) => {
   const [currentTweetIndex, setCurrentTweetIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTweetIndex((prev) => (prev + 1) % sampleTweets.length);
+      setCurrentTweetIndex((prev) => (prev + 1) % raylsTweets.length);
     }, 5000); // Change tweet every 5 seconds
 
     return () => clearInterval(interval);
@@ -40,7 +45,6 @@ const Grid12Card = forwardRef<HTMLDivElement, Grid12CardProps>(({ onClick }, ref
     <Card
       ref={ref}
       className="col-start-4 row-start-6 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
-      onClick={onClick}
     >
       <div className="p-6 h-full">
         <div className="h-full relative overflow-hidden">
@@ -54,10 +58,15 @@ const Grid12Card = forwardRef<HTMLDivElement, Grid12CardProps>(({ onClick }, ref
               className="absolute inset-0 flex items-center"
             >
               <div className="flex flex-col gap-2">
-                <p className="text-lg text-gray-900">{sampleTweets[currentTweetIndex].text}</p>
-                <span className="text-sm text-gray-800">
-                  {sampleTweets[currentTweetIndex].author}
-                </span>
+                <p className="text-sm text-gray-900 leading-relaxed">{raylsTweets[currentTweetIndex].text}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-600">
+                    {raylsTweets[currentTweetIndex].author}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {raylsTweets[currentTweetIndex].timeAgo}
+                  </span>
+                </div>
               </div>
             </motion.div>
           </AnimatePresence>

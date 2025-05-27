@@ -4,11 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { DevModal } from '@/components/modals';
 
-interface Grid11CardProps {
-  onClick?: () => void;
-}
-
-const Grid11Card = forwardRef<HTMLDivElement, Grid11CardProps>(({ onClick }, ref) => {
+const Grid11Card = forwardRef<HTMLDivElement>((props, ref) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -17,7 +13,6 @@ const Grid11Card = forwardRef<HTMLDivElement, Grid11CardProps>(({ onClick }, ref
       <Card
         ref={ref}
         className="col-start-5 row-start-5 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
-        onClick={onClick}
       >
         <div
           className="h-full w-full"

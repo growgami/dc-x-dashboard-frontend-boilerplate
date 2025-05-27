@@ -1,6 +1,6 @@
 "use client"
 
-import { forwardRef } from 'react';
+import { forwardRef, useMemo, useCallback } from 'react';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, ResponsiveContainer, Tooltip } from "recharts"
 import {
   Card,
@@ -11,25 +11,42 @@ import {
   ChartContainer,
 } from "@/components/ui/chart"
 import { useInsightsModal } from "@/context/InsightsModalContext";
+import { useTimeRange } from "@/context/TimeRangeContext"
 
 interface ChartDataPoint {
   day: string
   fills: number
 }
 
-const chartData: ChartDataPoint[] = [
-  { day: "Monday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Tuesday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Wednesday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Thursday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Friday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Saturday", fills: Math.floor(Math.random() * 100) + 50 },
-  { day: "Sunday", fills: Math.floor(Math.random() * 100) + 50 },
-];
+// Real data from form-submission-dates.csv
+const rawFormSubmissionData = [
+  { date: "2025-04-24", submissions: 561 },
+  { date: "2025-04-25", submissions: 20384 },
+  { date: "2025-04-26", submissions: 2532 },
+  { date: "2025-04-27", submissions: 1053 },
+  { date: "2025-04-28", submissions: 1577 },
+  { date: "2025-04-29", submissions: 2382 },
+  { date: "2025-04-30", submissions: 1495 },
+  { date: "2025-05-01", submissions: 777 },
+  { date: "2025-05-02", submissions: 531 },
+  { date: "2025-05-03", submissions: 591 },
+  { date: "2025-05-04", submissions: 804 },
+  { date: "2025-05-05", submissions: 856 },
+  { date: "2025-05-06", submissions: 471 },
+  { date: "2025-05-07", submissions: 359 },
+  { date: "2025-05-08", submissions: 409 },
+  { date: "2025-05-09", submissions: 315 },
+  { date: "2025-05-10", submissions: 300 },
+  { date: "2025-05-11", submissions: 248 },
+  { date: "2025-05-12", submissions: 154 },
+  { date: "2025-05-13", submissions: 427 },
+  { date: "2025-05-14", submissions: 225 },
+  { date: "2025-05-15", submissions: 134 }
+]
 
 const chartConfig = {
   fills: {
-    label: "Form Fills",
+    label: "Form Submissions",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
@@ -40,6 +57,75 @@ interface Grid7CardProps {
 
 const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) => {
   const { openModal } = useInsightsModal();
+  const { timeRange } = useTimeRange()
+
+  // Helper function to get normalized daily data (last 7 days)
+  const getNormalizedDailyData = useCallback((): ChartDataPoint[] => {
+    const dateMap = new Map<string, typeof rawFormSubmissionData[0]>();
+    rawFormSubmissionData.forEach(item => {
+      dateMap.set(item.date, item);
+    });
+    
+    // Get the last 7 days from the latest date in our data
+    const latestDataDate = new Date("2025-05-15");
+    const last7Days: ChartDataPoint[] = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(latestDataDate);
+      date.setDate(latestDataDate.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const dayData = dateMap.get(dateStr);
+      
+      // Use day abbreviation for better display
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+      
+      last7Days.push({
+        day: dayName,
+        fills: dayData ? dayData.submissions : 0
+      });
+    }
+    
+    return last7Days;
+  }, []);
+
+  const chartData = useMemo(() => {
+    switch (timeRange) {
+      case "daily":
+        // Show last 7 consecutive days
+        return getNormalizedDailyData();
+        
+      case "weekly":
+        // Show weekly aggregation - group every 7 days
+        const weeklyData: ChartDataPoint[] = [];
+        for (let i = 0; i < rawFormSubmissionData.length; i += 7) {
+          const weekData = rawFormSubmissionData.slice(i, i + 7);
+          const weekTotal = weekData.reduce((sum, day) => sum + day.submissions, 0);
+          const weekLabel = `Week ${Math.floor(i / 7) + 1}`;
+          
+          weeklyData.push({
+            day: weekLabel,
+            fills: weekTotal
+          });
+        }
+        return weeklyData.slice(-4); // Last 4 weeks
+        
+      case "monthly":
+        // Show monthly aggregation
+        const monthMap = new Map<string, number>();
+        rawFormSubmissionData.forEach(item => {
+          const monthKey = item.date.substring(0, 7); // YYYY-MM
+          monthMap.set(monthKey, (monthMap.get(monthKey) || 0) + item.submissions);
+        });
+        
+        return Array.from(monthMap.entries()).map(([month, total]) => ({
+          day: new Date(month + "-01").toLocaleDateString('en-US', { month: 'short' }),
+          fills: total
+        }));
+        
+      default:
+        return getNormalizedDailyData();
+    }
+  }, [timeRange, getNormalizedDailyData]);
 
   const handleClick = () => {
     openModal('7');
@@ -49,7 +135,7 @@ const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) 
   return (
     <Card
       ref={ref}
-      className="col-start-3 row-start-4 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] z-10"
+      className="col-start-3 row-start-4 row-span-2 flex flex-col h-full transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1] z-10 cursor-pointer"
       onClick={handleClick}
     >
       <div className="px-6 pt-6">
@@ -79,7 +165,7 @@ const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) 
                   dataKey="day"
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => value.slice(0, 3)}
+                  tickFormatter={(value) => value.length > 3 ? value.slice(0, 3) : value}
                 />
                 <Tooltip
                   cursor={false}
@@ -106,6 +192,9 @@ const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) 
                     marginBottom: '0.25rem',
                     textShadow: '0 1px 2px rgba(255, 255, 255, 0.1)'
                   }}
+                  formatter={(value, name) => {
+                    return [value.toLocaleString(), name]
+                  }}
                 />
                 <Bar
                   name={chartConfig.fills.label}
@@ -122,6 +211,7 @@ const Grid7Card = forwardRef<HTMLDivElement, Grid7CardProps>(({ onClick }, ref) 
                     offset={12}
                     className="fill-foreground"
                     fontSize={12}
+                    formatter={(value: number) => value.toLocaleString()}
                   />
                 </Bar>
               </BarChart>

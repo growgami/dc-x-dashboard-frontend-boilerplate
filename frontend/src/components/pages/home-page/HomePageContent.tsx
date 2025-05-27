@@ -241,7 +241,7 @@ const HomePageContent = () => {
             <Grid2Card ref={grid2Ref} onClick={() => handleGridCardClick('2')} />
             <Grid3Card ref={grid3Ref} onClick={() => handleGridCardClick('3')} />
             <Grid4Card ref={grid4Ref} />
-            <Grid5Card ref={grid5Ref} onClick={() => handleGridCardClick('5')} />
+            <Grid5Card ref={grid5Ref} />
             <Grid6Card ref={grid6Ref} onClick={() => handleGridCardClick('6')} />
             <Grid7Card ref={grid7Ref} onClick={() => handleGridCardClick('7')} />
             <Grid8Card 
@@ -250,10 +250,10 @@ const HomePageContent = () => {
               isOpen={modalOpen && selectedCard === '8'} 
               onOpenChange={(open) => !open && closeModal()} 
             />
-            <Grid9Card ref={grid9Ref} onClick={() => handleGridCardClick('9')} />
-            <Grid10Card ref={grid10Ref} onClick={() => handleGridCardClick('10')} />
-            <Grid11Card ref={grid11Ref} onClick={() => handleGridCardClick('11')} />
-            <Grid12Card ref={grid12Ref} onClick={() => handleGridCardClick('12')} />
+            <Grid9Card ref={grid9Ref} />
+            <Grid10Card ref={grid10Ref} />
+            <Grid11Card ref={grid11Ref} />
+            <Grid12Card ref={grid12Ref} />
             <Grid13Card ref={grid13Ref} onClick={() => handleGridCardClick('13')} />
 
             <div className="absolute bottom-12 left-20">
