@@ -7,9 +7,7 @@ import { useXPercentageMetrics } from "@/features/x-metrics/hooks/useXPercentage
 
 import { useTimeRange } from "@/context/TimeRangeContext";
 
-interface Grid4CardProps {}
-
-const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card(props, ref) {
+const Grid4Card = forwardRef<HTMLDivElement>(function Grid4Card(props, ref) {
   const { timeRange } = useTimeRange();
   const { percentages, isLoading, error } = useXPercentageMetrics({ timeRange });
 
