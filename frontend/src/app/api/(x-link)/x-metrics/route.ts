@@ -35,12 +35,8 @@ export async function GET(
       effectiveTimeRange = 'all';
     }
   } else {
-    // If grouping is provided, use timeRange for effectiveTimeRange
-    if (timeRange === 'daily') {
-      effectiveTimeRange = '7d';
-    } else {
-      effectiveTimeRange = 'all';
-    }
+    // If grouping is provided, use timeRange directly as effectiveTimeRange
+    effectiveTimeRange = timeRange;
   }
 
   const metrics = await getDailyMetrics(effectiveTimeRange, grouping);

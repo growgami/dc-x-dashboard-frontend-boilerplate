@@ -3,17 +3,15 @@
 import { forwardRef } from 'react';
 import Card from '../../../components/ui/cards/Card';
 import { Users, LineChart, Heart } from 'lucide-react';
-import { useXMetrics } from "@/features/x-metrics/hooks/useXChartMetrics";
+import { useXPercentageMetrics } from "@/features/x-metrics/hooks/useXPercentageMetrics";
 
 import { useTimeRange } from "@/context/TimeRangeContext";
 
-interface Grid4CardProps {
-  onClick?: () => void;
-}
+interface Grid4CardProps {}
 
-const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card({ onClick }, ref) {
+const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card(props, ref) {
   const { timeRange } = useTimeRange();
-  const { percentages, isLoading, error } = useXMetrics({ timeRange });
+  const { percentages, isLoading, error } = useXPercentageMetrics({ timeRange });
 
   const formatPercentage = (value: number) => {
     const sign = value >= 0 ? '+' : '';
@@ -25,7 +23,6 @@ const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card(
       <Card
         ref={ref}
         className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
-        onClick={onClick}
       >
         <div className="h-full w-full flex items-center justify-center">
           <p className="text-red-500">Failed to load metrics data</p>
@@ -38,7 +35,6 @@ const Grid4Card = forwardRef<HTMLDivElement, Grid4CardProps>(function Grid4Card(
     <Card
       ref={ref}
       className="col-start-3 row-start-3 transition-all duration-300 hover:shadow-xl shadow-[-2px_-2px_8px_#ffffff,8px_8px_16px_#d1d1d1]"
-      onClick={onClick}
     >
       <div className="h-full w-full flex items-center justify-center">
         {isLoading ? (

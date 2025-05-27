@@ -18,15 +18,15 @@ import { useXMetrics } from "@/features/x-metrics/hooks/useXChartMetrics"
 
 const chartConfig = {
   dataset1: {
-    label: "Followers",
+    label: "Impressions",
     color: "hsl(var(--chart-1))",
   },
   dataset2: {
-    label: "Impressions",
+    label: "Engagements",
     color: "hsl(var(--chart-2))",
   },
   dataset3: {
-    label: "Engagements",
+    label: "Followers",
     color: "hsl(var(--chart-3))",
   },
 } satisfies ChartConfig

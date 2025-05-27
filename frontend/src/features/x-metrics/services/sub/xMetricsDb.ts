@@ -135,7 +135,7 @@ export async function getDailyMetrics(
         MAX(CAST(date AS date)) AS end_date,
         SUM(impressions) AS impressions,
         SUM(engagements) AS engagements,
-        SUM(followers) AS followers
+        MAX(followers) AS followers
       `;
       groupByClause = 'GROUP BY year, week ORDER BY year ASC, week ASC';
     } else if (grouping === 'month') {
@@ -146,7 +146,7 @@ export async function getDailyMetrics(
         MAX(CAST(date AS date)) AS end_date,
         SUM(impressions) AS impressions,
         SUM(engagements) AS engagements,
-        SUM(followers) AS followers
+        MAX(followers) AS followers
       `;
       groupByClause = 'GROUP BY year, month ORDER BY year ASC, month ASC';
     } else {
@@ -154,7 +154,7 @@ export async function getDailyMetrics(
         CAST(date AS date) as date,
         SUM(impressions) as impressions,
         SUM(engagements) as engagements,
-        SUM(followers) as followers
+        MAX(followers) as followers
       `;
       groupByClause = 'GROUP BY date ORDER BY date ASC';
     }
@@ -172,11 +172,12 @@ export async function getDailyMetrics(
         days = parseInt(timeRange, 10);
       }
       if (days !== null && !isNaN(days)) {
-        query += ` WHERE date IN (
-          SELECT date FROM engagement_metrics
-          GROUP BY date
-          ORDER BY date DESC
-          LIMIT ${days}
+        // Get the last N consecutive days starting from the most recent date
+        // Use a simpler approach that works with TEXT dates in YYYY-MM-DD format
+        query += ` WHERE date >= (
+          SELECT date FROM engagement_metrics 
+          ORDER BY date DESC 
+          OFFSET ${days - 1} LIMIT 1
         )`;
       }
     }

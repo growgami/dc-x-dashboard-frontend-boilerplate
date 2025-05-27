@@ -240,7 +240,7 @@ const HomePageContent = () => {
             <Grid1Card ref={grid1Ref} onClick={() => handleGridCardClick('1')} />
             <Grid2Card ref={grid2Ref} onClick={() => handleGridCardClick('2')} />
             <Grid3Card ref={grid3Ref} onClick={() => handleGridCardClick('3')} />
-            <Grid4Card ref={grid4Ref} onClick={() => handleGridCardClick('4')} />
+            <Grid4Card ref={grid4Ref} />
             <Grid5Card ref={grid5Ref} onClick={() => handleGridCardClick('5')} />
             <Grid6Card ref={grid6Ref} onClick={() => handleGridCardClick('6')} />
             <Grid7Card ref={grid7Ref} onClick={() => handleGridCardClick('7')} />

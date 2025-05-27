@@ -48,6 +48,7 @@ async function initializeSchema() {
         views INTEGER NOT NULL,
         quotes INTEGER NOT NULL,
         bookmarks INTEGER NOT NULL,
+        followers INTEGER NOT NULL,
         collected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (tweet_id) REFERENCES tweets(tweet_id)
       );

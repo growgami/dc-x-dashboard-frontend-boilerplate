@@ -6,9 +6,9 @@ import type { XMetricsAggregatedRow } from '../types/xMetricsTypes'; // NEW: imp
 // Types
 export interface ChartDataPoint {
   day: string;
-  dataset1: number; // followers
-  dataset2: number; // impressions
-  dataset3: number; // engagements
+  dataset1: number; // impressions
+  dataset2: number; // engagements
+  dataset3: number; // followers
 }
 
 // Use the shared type for API data
@@ -121,42 +121,38 @@ export function useXMetrics({ timeRange = 'daily' }: UseXMetricsOptions = {}) {
   }, [currentError]);
 
   // Transform metrics to chart data using the label field for X axis
-  // Helper to always return Sun-Sat for daily, filling missing days with 0s
+  // Helper to return the last 7 days for daily view, filling missing days with 0s
   const getNormalizedDailyData = useCallback((metrics: XMetricsApiData[]): ChartDataPoint[] => {
-    // Map: weekday (0=Sun, 6=Sat) -> metric
-    const dayMap = new Map<number, XMetricsApiData>();
+    // Create a map of date string -> metric for quick lookup
+    const dateMap = new Map<string, XMetricsApiData>();
     metrics.forEach(metric => {
       if (metric.date) {
+        // Use YYYY-MM-DD format for consistent comparison
         const dateObj = new Date(metric.date);
-        dayMap.set(dateObj.getDay(), metric);
+        const dateStr = dateObj.toISOString().split('T')[0];
+        dateMap.set(dateStr, metric);
       }
     });
-    // Sun-Sat labels
-    const weekDays = [
-      "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-    ];
-    // Find the most recent Sunday as the anchor (if any data exists)
-    let anchorDate = null;
-    if (metrics.length > 0 && metrics[0].date) {
-      anchorDate = new Date(metrics[0].date);
-      // Go back to the most recent Sunday
-      anchorDate.setDate(anchorDate.getDate() - anchorDate.getDay());
-    } else {
-      anchorDate = new Date();
-      anchorDate.setDate(anchorDate.getDate() - anchorDate.getDay());
+    
+    // Get the last 7 days (today going backwards)
+    const today = new Date();
+    const last7Days: ChartDataPoint[] = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const metric = dateMap.get(dateStr);
+      
+      last7Days.push({
+        day: date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' }),
+        dataset1: metric ? metric.impressions : 0,
+        dataset2: metric ? metric.engagements : 0,
+        dataset3: metric ? metric.followers : 0,
+      });
     }
-    // Build Sun-Sat
-    return weekDays.map((wd, i) => {
-      const d = new Date(anchorDate);
-      d.setDate(anchorDate.getDate() + i);
-      const metric = dayMap.get(i);
-      return {
-        day: d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' }),
-        dataset1: metric ? metric.followers : 0,
-        dataset2: metric ? metric.impressions : 0,
-        dataset3: metric ? metric.engagements : 0,
-      };
-    });
+    
+    return last7Days;
   }, []);
 
   const transformMetricsToChartData = useCallback((metrics: XMetricsApiData[]): ChartDataPoint[] => {
@@ -200,9 +196,9 @@ export function useXMetrics({ timeRange = 'daily' }: UseXMetricsOptions = {}) {
       }
       return {
         day: dayLabel,
-        dataset1: metric.followers,
-        dataset2: metric.impressions,
-        dataset3: metric.engagements
+        dataset1: metric.impressions,
+        dataset2: metric.engagements,
+        dataset3: metric.followers
       };
     });
   }, [grouping, getNormalizedDailyData]);
@@ -210,15 +206,24 @@ export function useXMetrics({ timeRange = 'daily' }: UseXMetricsOptions = {}) {
   // Update chart data and percentages when data changes
   useEffect(() => {
     if (currentData) {
-      setChartData(transformMetricsToChartData(currentData));
+      const newChartData = transformMetricsToChartData(currentData);
+      setChartData(newChartData);
+      
+      // For daily view, calculate percentages from the chart data (last 7 days)
+      // For weekly/monthly, use the original API data
+      if (grouping === 'day' && newChartData.length > 1) {
+        // Convert chart data back to the format expected by calculatePercentages
+        const chartDataAsMetrics = newChartData.map(point => ({
+          followers: point.dataset3,
+          impressions: point.dataset1,
+          engagements: point.dataset2
+        }));
+        setPercentages(calculatePercentages(chartDataAsMetrics));
+      } else if (grouping !== 'day' && currentData && currentData.length > 1) {
+        setPercentages(calculatePercentages(currentData));
+      }
     }
-  }, [currentData, transformMetricsToChartData]);
-
-  useEffect(() => {
-    if (currentData && currentData.length > 1) {
-      setPercentages(calculatePercentages(currentData));
-    }
-  }, [currentData]);
+  }, [currentData, transformMetricsToChartData, grouping]);
 
   return {
     // Data
